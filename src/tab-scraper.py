@@ -1,6 +1,9 @@
 import requests
 import re
 import json
+import sys
+# noinspection PyUnresolvedReferences
+from PyQt5 import QtGui
 
 # TODO pagination
 
