@@ -1,103 +1,72 @@
-# -*- coding: utf-8 -*-
-
-# Form implementation generated from reading ui file 'C:\Users\seanh\Code\tab-scraper\ui\search.ui'
-#
-# Created by: PyQt5 UI code generator 5.11.3
-#
-# WARNING! All changes made in this file will be lost!
-
+# noinspection PyUnresolvedReferences
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Ui_MainWindow(object):
-    def setupUi(self, MainWindow):
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(200, 420)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
-        MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMinimumSize(QtCore.QSize(200, 420))
-        MainWindow.setMaximumSize(QtCore.QSize(200, 420))
+class UiSearchWindow(object):
+    def setupUi(self, SearchWindow):
+        SearchWindow.setObjectName("SearchWindow")
+        SearchWindow.setMinimumSize(QtCore.QSize(200, 400))
+        SearchWindow.setMaximumSize(QtCore.QSize(200, 400))
         font = QtGui.QFont()
         font.setPointSize(12)
-        MainWindow.setFont(font)
-        MainWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        SearchWindow.setFont(font)
+        SearchWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
+
+        self.centralwidget = QtWidgets.QWidget(SearchWindow)
         self.centralwidget.setObjectName("centralwidget")
+
         self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit.setGeometry(QtCore.QRect(25, 25, 150, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.lineEdit.setFont(font)
-        self.lineEdit.setAutoFillBackground(False)
-        self.lineEdit.setText("")
         self.lineEdit.setObjectName("lineEdit")
+
         self.lineEdit_2 = QtWidgets.QLineEdit(self.centralwidget)
         self.lineEdit_2.setGeometry(QtCore.QRect(25, 70, 150, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.lineEdit_2.setFont(font)
         self.lineEdit_2.setObjectName("lineEdit_2")
+
         self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox.setGeometry(QtCore.QRect(25, 125, 150, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.checkBox.setFont(font)
         self.checkBox.setObjectName("checkBox")
+
         self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_2.setGeometry(QtCore.QRect(25, 160, 150, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.checkBox_2.setFont(font)
         self.checkBox_2.setObjectName("checkBox_2")
+
         self.checkBox_3 = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_3.setGeometry(QtCore.QRect(25, 195, 150, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.checkBox_3.setFont(font)
         self.checkBox_3.setObjectName("checkBox_3")
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(25, 345, 150, 30))
-        font = QtGui.QFont()
-        font.setPointSize(12)
-        self.pushButton.setFont(font)
-        icon = QtGui.QIcon.fromTheme("search")
-        self.pushButton.setIcon(icon)
-        self.pushButton.setObjectName("pushButton")
+
         self.checkBox_4 = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_4.setGeometry(QtCore.QRect(25, 230, 150, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.checkBox_4.setFont(font)
         self.checkBox_4.setObjectName("checkBox_4")
+
         self.checkBox_5 = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_5.setGeometry(QtCore.QRect(25, 265, 150, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.checkBox_5.setFont(font)
         self.checkBox_5.setObjectName("checkBox_5")
+
         self.checkBox_6 = QtWidgets.QCheckBox(self.centralwidget)
         self.checkBox_6.setGeometry(QtCore.QRect(25, 300, 150, 20))
-        font = QtGui.QFont()
-        font.setPointSize(12)
         self.checkBox_6.setFont(font)
         self.checkBox_6.setObjectName("checkBox_6")
-        MainWindow.setCentralWidget(self.centralwidget)
-        self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 200, 27))
-        self.menubar.setObjectName("menubar")
-        MainWindow.setMenuBar(self.menubar)
-        self.statusbar = QtWidgets.QStatusBar(MainWindow)
-        self.statusbar.setObjectName("statusbar")
-        MainWindow.setStatusBar(self.statusbar)
 
-        self.retranslateUi(MainWindow)
-        QtCore.QMetaObject.connectSlotsByName(MainWindow)
+        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
+        self.pushButton.setGeometry(QtCore.QRect(25, 345, 150, 30))
+        self.pushButton.setFont(font)
+        self.pushButton.setObjectName("pushButton")
+
+        SearchWindow.setCentralWidget(self.centralwidget)
+
+        self.retranslateUi(SearchWindow)
+        QtCore.QMetaObject.connectSlotsByName(SearchWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        MainWindow.setWindowTitle(_translate("SearchWindow", "SearchWindow"))
         self.lineEdit.setPlaceholderText(_translate("MainWindow", "Artist"))
         self.lineEdit_2.setPlaceholderText(_translate("MainWindow", "Song Title"))
         self.checkBox.setText(_translate("MainWindow", "Chords"))
@@ -112,9 +81,8 @@ class Ui_MainWindow(object):
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+    SearchWindow = QtWidgets.QMainWindow()
+    ui = UiSearchWindow()
+    ui.setupUi(SearchWindow)
+    SearchWindow.show()
     sys.exit(app.exec_())
-
