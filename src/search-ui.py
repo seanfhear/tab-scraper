@@ -1,75 +1,55 @@
 # noinspection PyUnresolvedReferences
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+WIDTH = 150
+TEXT_BOX_HEIGHT = 30
+CHECK_BOX_HEIGHT = 20
+BUTTON_HEIGHT = 30
+OFFSET = 25
+CHECK_BOX_OFFSET = 15
+CHECK_BOXES = ["{}Chords", "{}Tab", "{}GuitarPro", "{}Power", "{}Bass", "{}Ukulele"]
+
+
+# noinspection PyUnresolvedReferences
 class UiSearchWindow(object):
-    def setupUi(self, SearchWindow):
-        SearchWindow.setObjectName("SearchWindow")
-        SearchWindow.setMinimumSize(QtCore.QSize(200, 355))
-        SearchWindow.setMaximumSize(QtCore.QSize(200, 355))
+    def setup_ui(self, search_window):
         font = QtGui.QFont()
         font.setPointSize(12)
-        SearchWindow.setFont(font)
-        SearchWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
 
-        self.centralwidget = QtWidgets.QWidget(SearchWindow)
-        self.centralwidget.setObjectName("centralwidget")
+        search_window.setObjectName("SearchWindow")
+        search_window.setMinimumSize(QtCore.QSize(200, 355))
+        search_window.setMaximumSize(QtCore.QSize(200, 355))
+        search_window.setFont(font)
+        search_window.setTabShape(QtWidgets.QTabWidget.Rounded)
 
-        self.lineEdit = QtWidgets.QLineEdit(self.centralwidget)
-        self.lineEdit.setGeometry(QtCore.QRect(25, 25, 150, 30))
-        self.lineEdit.setFont(font)
-        self.lineEdit.setObjectName("lineEdit")
+        self.central_widget = QtWidgets.QWidget(search_window)
+        self.central_widget.setObjectName("centralwidget")
 
-        self.checkBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox.setGeometry(QtCore.QRect(25, 80, 150, 20))
-        self.checkBox.setFont(font)
-        self.checkBox.setObjectName("checkBox")
+        self.search_input = QtWidgets.QLineEdit(self.central_widget)
+        self.search_input.setGeometry(QtCore.QRect(25, 25, WIDTH, TEXT_BOX_HEIGHT))
+        self.search_input.setObjectName("lineEdit")
 
-        self.checkBox_2 = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_2.setGeometry(QtCore.QRect(25, 115, 150, 20))
-        self.checkBox_2.setFont(font)
-        self.checkBox_2.setObjectName("checkBox_2")
+        self.check_boxes = [" "] * 6
+        for i, check_box in enumerate(CHECK_BOXES):
+            self.check_boxes[i] = QtWidgets.QCheckBox(self.central_widget)
+            self.check_boxes[i].setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) + (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * i), WIDTH, CHECK_BOX_HEIGHT))
+            self.check_boxes[i].setObjectName(check_box.format("checkBox"))
+            self.check_boxes[i].setText(QtCore.QCoreApplication.translate("UiSearchWindow", check_box.format("")))
 
-        self.checkBox_3 = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_3.setGeometry(QtCore.QRect(25, 150, 150, 20))
-        self.checkBox_3.setFont(font)
-        self.checkBox_3.setObjectName("checkBox_3")
+        self.push_button = QtWidgets.QPushButton(self.central_widget)
+        self.push_button.setGeometry(QtCore.QRect(25, 300, 150, 30))
+        self.push_button.setObjectName("pushButton")
 
-        self.checkBox_4 = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_4.setGeometry(QtCore.QRect(25, 185, 150, 20))
-        self.checkBox_4.setFont(font)
-        self.checkBox_4.setObjectName("checkBox_4")
+        search_window.setCentralWidget(self.central_widget)
 
-        self.checkBox_5 = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_5.setGeometry(QtCore.QRect(25, 220, 150, 20))
-        self.checkBox_5.setFont(font)
-        self.checkBox_5.setObjectName("checkBox_5")
+        self.retranslateUi(search_window)
+        QtCore.QMetaObject.connectSlotsByName(search_window)
 
-        self.checkBox_6 = QtWidgets.QCheckBox(self.centralwidget)
-        self.checkBox_6.setGeometry(QtCore.QRect(25, 255, 150, 20))
-        self.checkBox_6.setFont(font)
-        self.checkBox_6.setObjectName("checkBox_6")
-
-        self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(25, 300, 150, 30))
-        self.pushButton.setFont(font)
-        self.pushButton.setObjectName("pushButton")
-
-        SearchWindow.setCentralWidget(self.centralwidget)
-
-        self.retranslateUi(SearchWindow)
-        QtCore.QMetaObject.connectSlotsByName(SearchWindow)
-
-    def retranslateUi(self, MainWindow):
+    def retranslateUi(self, window):
         _translate = QtCore.QCoreApplication.translate
-        MainWindow.setWindowTitle(_translate("SearchWindow", "SearchWindow"))
-        self.lineEdit.setPlaceholderText(_translate("MainWindow", "Search query..."))
-        self.checkBox.setText(_translate("MainWindow", "Chords"))
-        self.checkBox_2.setText(_translate("MainWindow", "Tab"))
-        self.checkBox_3.setText(_translate("MainWindow", "GuitarPro"))
-        self.pushButton.setText(_translate("MainWindow", "Search"))
-        self.checkBox_4.setText(_translate("MainWindow", "Bass"))
-        self.checkBox_5.setText(_translate("MainWindow", "Ukulele"))
-        self.checkBox_6.setText(_translate("MainWindow", "Power"))
+        window.setWindowTitle(_translate("UiSearchWindow", "Tab Search"))
+        self.search_input.setPlaceholderText(_translate("UiSearchWindow", "Search query..."))
+        self.push_button.setText(_translate("UiSearchWindow", "Search"))
 
 
 if __name__ == "__main__":
@@ -77,6 +57,6 @@ if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
     SearchWindow = QtWidgets.QMainWindow()
     ui = UiSearchWindow()
-    ui.setupUi(SearchWindow)
+    ui.setup_ui(SearchWindow)
     SearchWindow.show()
     sys.exit(app.exec_())
