@@ -35,10 +35,6 @@ class UiSearchWindow(object):
         self.central_widget = QtWidgets.QWidget(search_window)
         self.central_widget.setObjectName("centralwidget")
 
-        self.search_input = QtWidgets.QLineEdit(self.central_widget)
-        self.search_input.setGeometry(QtCore.QRect(OFFSET, OFFSET, WIDTH, TEXT_BOX_HEIGHT))
-        self.search_input.setObjectName("lineEdit")
-
         self.check_boxes = [" "] * len(CHECK_BOX_NAMES)
         for i, name in enumerate(CHECK_BOX_NAMES):
             self.check_boxes[i] = QtWidgets.QCheckBox(self.central_widget)
@@ -54,7 +50,13 @@ class UiSearchWindow(object):
                                                            len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET),
                                                   WIDTH, BUTTON_HEIGHT))
         self.push_button.setObjectName("searchButton")
+        self.push_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.push_button.clicked.connect(self.search_tabs)
+
+        self.search_input = QtWidgets.QLineEdit(self.central_widget)
+        self.search_input.setGeometry(QtCore.QRect(OFFSET, OFFSET, WIDTH, TEXT_BOX_HEIGHT))
+        self.search_input.setObjectName("lineEdit")
+        self.search_input.returnPressed.connect(self.push_button.click)
 
         search_window.setCentralWidget(self.central_widget)
 
