@@ -68,11 +68,13 @@ class MainWindow(object):
         self.tableWidget = QtWidgets.QTableWidget(self.central_widget)
         self.tableWidget.setGeometry(QtCore.QRect(SEARCH_WIDTH, OFFSET, TOTAL_WIDTH - SEARCH_WIDTH - OFFSET,
                                                   window_height - OFFSET * 2))
+        self.tableWidget.setSortingEnabled(True)
         self.tableWidget.setAlternatingRowColors(True)
         self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
         self.tableWidget.setVerticalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
         self.tableWidget.setHorizontalScrollMode(QtWidgets.QAbstractItemView.ScrollPerPixel)
+        self.tableWidget.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
 
         self.tableWidget.setShowGrid(False)
         self.tableWidget.setObjectName("tableWidget")
