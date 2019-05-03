@@ -6,13 +6,13 @@ import sys
 from PyQt5 import QtGui
 
 # TODO pagination
+# TODO remove warning suppressions
 
 SEARCH_URL = "https://www.ultimate-guitar.com/search.php?search_type=title&value={}"
 RESULTS_PATTERN = "\"results\":(\[.*?\]),\"pagination\""
 
 
 def search_tabs(search_string, types):
-    print(SEARCH_URL.format(search_string))
     response = requests.get(SEARCH_URL.format(search_string))
     try:
         # isolate results from page using regex
@@ -20,11 +20,17 @@ def search_tabs(search_string, types):
     except AttributeError:
         results = ''
     response_data = json.loads(results)
+    ret = []
 
     for item in response_data:
         try:
             # Get every result that has a desired type defined above
             if item["type"] in types:
+                ret.append({"type": item["type"],
+                            "artist": item["artist_name"],
+                            "title": item["song_name"],
+                            "rating": round(float(item["rating"]), 2),
+                            "votes": item["votes"]})
                 print("Type: {}".format(item["type"]))
                 print("Artist: {}".format(item["artist_name"]))
                 print("Name: {}".format(item["song_name"]))
@@ -34,3 +40,4 @@ def search_tabs(search_string, types):
         except KeyError:
             # key error on "official" tabs which have 'marketing_type' instead of 'type', not interested in these tabs
             ''
+    return ret

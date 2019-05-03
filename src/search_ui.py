@@ -16,9 +16,12 @@ TYPES_DICT = {"Chords": "Chords",
               "Bass": "Bass Tabs",
               "Ukulele": "Ukulele Chords"}
 
+# TODO remove warning suppressions
+
 # noinspection PyUnresolvedReferences
 class UiSearchWindow(object):
     def setup_ui(self, search_window):
+        self.results = []
         font = QtGui.QFont()
         font.setPointSize(12)
 
@@ -76,7 +79,7 @@ class UiSearchWindow(object):
             if check_box.isChecked():
                 types.append(TYPES_DICT[check_box.text()])
         search_string = "%20".join(self.search_input.text().split())
-        tab_scraper.search_tabs(search_string, types)
+        self.results = tab_scraper.search_tabs(search_string, types)
 
 
 if __name__ == "__main__":
