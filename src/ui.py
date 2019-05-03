@@ -4,7 +4,7 @@ import tab_scraper
 import sys
 
 TOTAL_WIDTH = 1000
-SEARCH_WIDTH = 200
+SEARCH_WIDTH = 300
 SEARCH_ELEMENT_WIDTH = 150
 TEXT_BOX_HEIGHT = 30
 CHECK_BOX_HEIGHT = 20
@@ -22,9 +22,20 @@ TABLE_COLUMNS = ["Type", "Artist", "Title", "Rating", "Votes"]
 
 # TODO remove warning suppressions
 
-# noinspection PyUnresolvedReferences
-class MainWindow(object):
-    def setup_ui(self, search_window):
+
+class MyMainWindow(QtWidgets.QMainWindow):
+
+    def __init__(self, parent=None):
+
+        super(MyMainWindow, self).__init__(parent)
+        self.main_widget = MainWidget(self)
+        self.setCentralWidget(self.main_widget)
+
+
+class MainWidget(QtWidgets.QWidget):
+    def __init__(self, parent):
+        super(MainWidget, self).__init__(parent)
+
         self.results = []
         font = QtGui.QFont()
         font.setPointSize(12)
@@ -33,13 +44,7 @@ class MainWindow(object):
                          ((CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET) +
                          (OFFSET * 2 + BUTTON_HEIGHT))
 
-        search_window.setObjectName("SearchWindow")
-        search_window.setMinimumSize(QtCore.QSize(TOTAL_WIDTH, window_height))
-        search_window.setMaximumSize(QtCore.QSize(TOTAL_WIDTH, window_height))
-        search_window.setFont(font)
-        search_window.setTabShape(QtWidgets.QTabWidget.Rounded)
-
-        self.central_widget = QtWidgets.QWidget(search_window)
+        self.central_widget = QtWidgets.QWidget()
         self.central_widget.setObjectName("centralwidget")
 
         self.check_boxes = [" "] * len(CHECK_BOX_NAMES)
@@ -66,8 +71,7 @@ class MainWindow(object):
         self.search_input.returnPressed.connect(self.push_button.click)
 
         self.tableWidget = QtWidgets.QTableWidget(self.central_widget)
-        self.tableWidget.setGeometry(QtCore.QRect(SEARCH_WIDTH, OFFSET, TOTAL_WIDTH - SEARCH_WIDTH - OFFSET,
-                                                  window_height - OFFSET * 2))
+        self.tableWidget.setGeometry(QtCore.QRect(SEARCH_WIDTH, OFFSET, 651, 241))
         self.tableWidget.setAlternatingRowColors(True)
         self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
@@ -84,41 +88,15 @@ class MainWindow(object):
             item.setText(QtCore.QCoreApplication.translate("Form", header))
             self.tableWidget.setHorizontalHeaderItem(i, item)
 
-        header = self.tableWidget.horizontalHeader()
-        for i in range(len(TABLE_COLUMNS)):
-            if TABLE_COLUMNS[i] == "Title":
-                header.setSectionResizeMode(i, QtWidgets.QHeaderView.Stretch)
-            else:
-                header.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeToContents)
-
         self.tableWidget.horizontalHeader().setDefaultSectionSize(100)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(100)
 
-        self.retranslateUi(search_window)
-        QtCore.QMetaObject.connectSlotsByName(search_window)
-
-        search_window.setCentralWidget(self.central_widget)
+        self.layout = QtWidgets.QVBoxLayout(self)
 
 
-    def retranslateUi(self, window):
-        _translate = QtCore.QCoreApplication.translate
-        window.setWindowTitle(_translate("UiSearchWindow", "Tab Search"))
-        self.search_input.setPlaceholderText(_translate("UiSearchWindow", "Search query..."))
-        self.push_button.setText(_translate("UiSearchWindow", "Search"))
-
-    def search_tabs(self):
-        types = []
-        for check_box in self.check_boxes:
-            if check_box.isChecked():
-                types.append(TYPES_DICT[check_box.text()])
-        search_string = "%20".join(self.search_input.text().split())
-        self.results = tab_scraper.search_tabs(search_string, types)
 
 
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    SearchWindow = QtWidgets.QMainWindow()
-    ui = MainWindow()
-    ui.setup_ui(SearchWindow)
-    SearchWindow.show()
-    sys.exit(app.exec_())
+app = QtWidgets.QApplication([])
+main = MyMainWindow()
+main.show()
+sys.exit(app.exec_())
