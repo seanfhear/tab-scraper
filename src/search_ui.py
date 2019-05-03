@@ -22,6 +22,7 @@ TABLE_COLUMNS = ["Type", "Artist", "Title", "Rating", "Votes"]
 
 # TODO remove warning suppressions
 
+
 # noinspection PyUnresolvedReferences
 class MainWindow(object):
     def setup_ui(self, search_window):
@@ -31,9 +32,10 @@ class MainWindow(object):
 
         window_height = ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
                          ((CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET) +
-                         (OFFSET * 2 + BUTTON_HEIGHT))
+                         (OFFSET * 2 + BUTTON_HEIGHT)) * 2
 
         search_window.setObjectName("SearchWindow")
+        search_window.setWindowTitle("Tab Search")
         search_window.setMinimumSize(QtCore.QSize(TOTAL_WIDTH, window_height))
         search_window.setMaximumSize(QtCore.QSize(TOTAL_WIDTH, window_height))
         search_window.setFont(font)
@@ -49,21 +51,34 @@ class MainWindow(object):
                                                                   (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * i),
                                                          SEARCH_ELEMENT_WIDTH, CHECK_BOX_HEIGHT))
             self.check_boxes[i].setObjectName(name.format("checkBox"))
-            self.check_boxes[i].setText(QtCore.QCoreApplication.translate("UiSearchWindow", name.format("")))
+            self.check_boxes[i].setText(name.format(""))
 
-        self.push_button = QtWidgets.QPushButton(self.central_widget)
-        self.push_button.setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
-                                                           (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
-                                                           len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET),
-                                                  SEARCH_ELEMENT_WIDTH, BUTTON_HEIGHT))
-        self.push_button.setObjectName("searchButton")
-        self.push_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
-        self.push_button.clicked.connect(self.search_tabs)
+        self.search_button = QtWidgets.QPushButton(self.central_widget)
+        self.search_button.setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+                                                             (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                             len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET),
+                                                    SEARCH_ELEMENT_WIDTH, BUTTON_HEIGHT))
+        self.search_button.setObjectName("searchButton")
+        self.search_button.setText("Search")
+        self.search_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.search_button.clicked.connect(self.search_tabs)
+
+        self.download_button = QtWidgets.QPushButton(self.central_widget)
+        self.download_button.setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+                                                               (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                               len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
+                                                               (OFFSET + BUTTON_HEIGHT)),
+                                                      SEARCH_ELEMENT_WIDTH, BUTTON_HEIGHT))
+        self.download_button.setObjectName("downloadButton")
+        self.download_button.setText("Download")
+        self.download_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.download_button.clicked.connect(self.download_tab)
 
         self.search_input = QtWidgets.QLineEdit(self.central_widget)
         self.search_input.setGeometry(QtCore.QRect(OFFSET, OFFSET, SEARCH_ELEMENT_WIDTH, TEXT_BOX_HEIGHT))
         self.search_input.setObjectName("lineEdit")
-        self.search_input.returnPressed.connect(self.push_button.click)
+        self.search_input.returnPressed.connect(self.search_button.click)
+        self.search_input.setPlaceholderText("Search query...")
 
         self.tableWidget = QtWidgets.QTableWidget(self.central_widget)
         self.tableWidget.setGeometry(QtCore.QRect(SEARCH_WIDTH, OFFSET, TOTAL_WIDTH - SEARCH_WIDTH - OFFSET,
@@ -83,7 +98,7 @@ class MainWindow(object):
 
         for i, header in enumerate(TABLE_COLUMNS):
             item = QtWidgets.QTableWidgetItem()
-            item.setText(QtCore.QCoreApplication.translate("Form", header))
+            item.setText(header)
             self.tableWidget.setHorizontalHeaderItem(i, item)
 
         header = self.tableWidget.horizontalHeader()
@@ -96,17 +111,8 @@ class MainWindow(object):
         self.tableWidget.horizontalHeader().setDefaultSectionSize(100)
         self.tableWidget.horizontalHeader().setMinimumSectionSize(100)
 
-        self.retranslateUi(search_window)
         QtCore.QMetaObject.connectSlotsByName(search_window)
-
         search_window.setCentralWidget(self.central_widget)
-
-
-    def retranslateUi(self, window):
-        _translate = QtCore.QCoreApplication.translate
-        window.setWindowTitle(_translate("UiSearchWindow", "Tab Search"))
-        self.search_input.setPlaceholderText(_translate("UiSearchWindow", "Search query..."))
-        self.push_button.setText(_translate("UiSearchWindow", "Search"))
 
     def search_tabs(self):
         types = []
@@ -114,16 +120,20 @@ class MainWindow(object):
             if check_box.isChecked():
                 types.append(TYPES_DICT[check_box.text()])
         search_string = "%20".join(self.search_input.text().split())
-        self.results = tab_scraper.search_tabs(search_string, types)
-        self.update_table()
+        if len(search_string) > 0:
+            self.results = tab_scraper.search_tabs(search_string, types)
+            self.update_table()
 
     def update_table(self):
         self.tableWidget.setRowCount(len(self.results))
         for i in range(len(self.results)):
             for j in range(len(self.results[i])):
                 item = QtWidgets.QTableWidgetItem()
-                item.setText(QtCore.QCoreApplication.translate("Form", self.results[i][j]))
+                item.setText(self.results[i][j])
                 self.tableWidget.setItem(i, j, item)
+
+    def download_tab(self):
+        print("downloading...")
 
 
 if __name__ == "__main__":
