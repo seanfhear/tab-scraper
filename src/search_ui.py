@@ -22,9 +22,13 @@ class UiSearchWindow(object):
         font = QtGui.QFont()
         font.setPointSize(12)
 
+        window_height = ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+                         ((CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET) +
+                         (OFFSET * 2 + BUTTON_HEIGHT))
+
         search_window.setObjectName("SearchWindow")
-        search_window.setMinimumSize(QtCore.QSize(200, 355))
-        search_window.setMaximumSize(QtCore.QSize(200, 355))
+        search_window.setMinimumSize(QtCore.QSize(800, window_height))
+        search_window.setMaximumSize(QtCore.QSize(800, window_height))
         search_window.setFont(font)
         search_window.setTabShape(QtWidgets.QTabWidget.Rounded)
 
@@ -32,22 +36,28 @@ class UiSearchWindow(object):
         self.central_widget.setObjectName("centralwidget")
 
         self.search_input = QtWidgets.QLineEdit(self.central_widget)
-        self.search_input.setGeometry(QtCore.QRect(25, 25, WIDTH, TEXT_BOX_HEIGHT))
+        self.search_input.setGeometry(QtCore.QRect(OFFSET, OFFSET, WIDTH, TEXT_BOX_HEIGHT))
         self.search_input.setObjectName("lineEdit")
 
-        self.check_boxes = [" "] * 6
+        self.check_boxes = [" "] * len(CHECK_BOX_NAMES)
         for i, name in enumerate(CHECK_BOX_NAMES):
             self.check_boxes[i] = QtWidgets.QCheckBox(self.central_widget)
-            self.check_boxes[i].setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) + (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * i), WIDTH, CHECK_BOX_HEIGHT))
+            self.check_boxes[i].setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+                                                                  (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * i),
+                                                         WIDTH, CHECK_BOX_HEIGHT))
             self.check_boxes[i].setObjectName(name.format("checkBox"))
             self.check_boxes[i].setText(QtCore.QCoreApplication.translate("UiSearchWindow", name.format("")))
 
         self.push_button = QtWidgets.QPushButton(self.central_widget)
-        self.push_button.setGeometry(QtCore.QRect(25, 300, 150, 30))
+        self.push_button.setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+                                                           (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                           len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET),
+                                                  WIDTH, BUTTON_HEIGHT))
         self.push_button.setObjectName("searchButton")
         self.push_button.clicked.connect(self.search_tabs)
 
         search_window.setCentralWidget(self.central_widget)
+
 
         self.retranslateUi(search_window)
         QtCore.QMetaObject.connectSlotsByName(search_window)
