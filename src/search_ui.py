@@ -1,5 +1,6 @@
 # noinspection PyUnresolvedReferences
 from PyQt5 import QtCore, QtGui, QtWidgets
+from tab_scraper import search_tabs
 
 WIDTH = 150
 TEXT_BOX_HEIGHT = 30
@@ -39,7 +40,7 @@ class UiSearchWindow(object):
         self.push_button = QtWidgets.QPushButton(self.central_widget)
         self.push_button.setGeometry(QtCore.QRect(25, 300, 150, 30))
         self.push_button.setObjectName("searchButton")
-        self.push_button.clicked.connect(self.print_check_boxes)
+        self.push_button.clicked.connect(self.search_tabs)
 
         search_window.setCentralWidget(self.central_widget)
 
@@ -52,10 +53,13 @@ class UiSearchWindow(object):
         self.search_input.setPlaceholderText(_translate("UiSearchWindow", "Search query..."))
         self.push_button.setText(_translate("UiSearchWindow", "Search"))
 
-    def print_check_boxes(self):
+    def search_tabs(self):
+        types = []
         for check_box in self.check_boxes:
             if check_box.isChecked():
-                print(check_box.text())
+                types.append(check_box.text())
+        search_string = "%20".join(self.search_input.text().split())
+        search_tabs(search_string, types)
 
 
 if __name__ == "__main__":
