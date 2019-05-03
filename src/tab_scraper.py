@@ -26,15 +26,12 @@ def search_tabs(search_string, types):
         try:
             # Get every result that has a desired type defined above
             if item["type"] in types:
-                ret.append({"type": item["type"],
-                            "artist": item["artist_name"],
-                            "title": item["song_name"],
-                            "rating": round(float(item["rating"]), 2),
-                            "votes": item["votes"]})
+                ret.append((item["type"], item["artist_name"], item["song_name"], str(round(float(item["rating"]), 2)),
+                            str(item["votes"])))
                 print("Type: {}".format(item["type"]))
                 print("Artist: {}".format(item["artist_name"]))
                 print("Name: {}".format(item["song_name"]))
-                print("{} Rating from {} Votes".format(round(float(item["rating"]), 2), item["votes"]))
+                print("{} Rating from {} Votes".format(str(round(float(item["rating"]), 2)), item["votes"]))
                 print(item["tab_url"])
                 print()
         except KeyError:

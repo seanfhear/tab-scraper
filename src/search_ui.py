@@ -113,6 +113,15 @@ class MainWindow(object):
                 types.append(TYPES_DICT[check_box.text()])
         search_string = "%20".join(self.search_input.text().split())
         self.results = tab_scraper.search_tabs(search_string, types)
+        self.update_table()
+
+    def update_table(self):
+        self.tableWidget.setRowCount(len(self.results))
+        for i in range(len(self.results)):
+            for j in range(len(self.results[i])):
+                item = QtWidgets.QTableWidgetItem()
+                item.setText(QtCore.QCoreApplication.translate("Form", self.results[i][j]))
+                self.tableWidget.setItem(i, j, item)
 
 
 if __name__ == "__main__":
