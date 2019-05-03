@@ -1,6 +1,6 @@
 # noinspection PyUnresolvedReferences
 from PyQt5 import QtCore, QtGui, QtWidgets
-from tab_scraper import search_tabs
+import tab_scraper
 
 WIDTH = 150
 TEXT_BOX_HEIGHT = 30
@@ -8,8 +8,13 @@ CHECK_BOX_HEIGHT = 20
 BUTTON_HEIGHT = 30
 OFFSET = 25
 CHECK_BOX_OFFSET = 15
-CHECK_BOX_NAMES = ["{}Chords", "{}Tab", "{}GuitarPro", "{}Power", "{}Bass", "{}Ukulele"]
-
+CHECK_BOX_NAMES = ["{}Chords", "{}Tab", "{}GuitarPro", "{}PowerTab", "{}Bass", "{}Ukulele"]
+TYPES_DICT = {"Chords": "Chords",
+              "Tab": "Tabs",
+              "GuitarPro": "Pro",
+              "PowerTab": "Power",
+              "Bass": "Bass Tabs",
+              "Ukulele": "Ukulele Chords"}
 
 # noinspection PyUnresolvedReferences
 class UiSearchWindow(object):
@@ -57,9 +62,9 @@ class UiSearchWindow(object):
         types = []
         for check_box in self.check_boxes:
             if check_box.isChecked():
-                types.append(check_box.text())
+                types.append(TYPES_DICT[check_box.text()])
         search_string = "%20".join(self.search_input.text().split())
-        search_tabs(search_string, types)
+        tab_scraper.search_tabs(search_string, types)
 
 
 if __name__ == "__main__":
