@@ -3,6 +3,7 @@ import re
 import json
 # noinspection PyUnresolvedReferences
 from PyQt5 import QtGui
+from bs4 import BeautifulSoup
 
 # TODO remove warning suppressions
 
@@ -32,7 +33,7 @@ def search_tabs(search_string, types):
                 # Get every result that has a desired type
                 if item["type"] in types:
                     ret.append((item["type"], item["artist_name"], item["song_name"], str(round(float(item["rating"]), 2)),
-                                str(item["votes"])))
+                                str(item["votes"]), item["tab_url"], str(item["version"])))
             except KeyError:
                 # key error on "official" tabs which have 'marketing_type' instead of 'type', not interested in these tabs
                 ''
@@ -48,3 +49,16 @@ def search_tabs(search_string, types):
                 results = ''
             response_data = json.loads(results)
     return ret
+
+
+def download_tab(url):
+    print("downloading tab...")
+
+
+def download_file(url):
+    print("downloading file...")
+    response = requests.get(url)
+    soup = BeautifulSoup(response.content, "html.parser")
+    print(soup)
+    dl_form = soup.find('form')
+    print(dl_form)

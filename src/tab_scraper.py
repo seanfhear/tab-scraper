@@ -83,7 +83,7 @@ class MainWindow(object):
         self.tableWidget = QtWidgets.QTableWidget(self.central_widget)
         self.tableWidget.setGeometry(QtCore.QRect(SEARCH_WIDTH, OFFSET, TOTAL_WIDTH - SEARCH_WIDTH - OFFSET,
                                                   window_height - OFFSET * 2))
-        self.tableWidget.setSortingEnabled(True)
+        self.tableWidget.setSortingEnabled(False)
         self.tableWidget.setAlternatingRowColors(True)
         self.tableWidget.setSelectionMode(QtWidgets.QAbstractItemView.SingleSelection)
         self.tableWidget.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectRows)
@@ -127,13 +127,23 @@ class MainWindow(object):
     def update_table(self):
         self.tableWidget.setRowCount(len(self.results))
         for i in range(len(self.results)):
-            for j in range(len(self.results[i])):
+            for j in range(len(TABLE_COLUMNS)):
                 item = QtWidgets.QTableWidgetItem()
                 item.setText(self.results[i][j])
                 self.tableWidget.setItem(i, j, item)
 
     def download_tab(self):
         print("downloading...")
+        row = self.results[self.tableWidget.currentRow()]
+        url = row[-2]
+        is_file = False
+        if row[0] == "Pro" or row[0] == "Power":
+            is_file = True
+
+        if is_file:
+            utils.download_file(url)
+        else:
+            utils.download_tab(url)
 
 
 if __name__ == "__main__":
