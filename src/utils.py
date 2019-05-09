@@ -5,6 +5,7 @@ import json
 from PyQt5 import QtGui
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 
 # TODO remove warning suppressions
 
@@ -58,12 +59,18 @@ def download_tab(url):
 
 def download_file(url):
     print("downloading file...")
-    print(url)
     options = Options()
-    options.headless = False
+    options.headless = True
 
-    driver = webdriver.Firefox(options=options, executable_path=r'/usr/bin/geckodriver')
+    profile = FirefoxProfile()
+    profile.set_preference("browser.download.folderList", 2)
+    profile.set_preference("browser.download.manager.showWhenStarting", False)
+    profile.set_preference("browser.download.dir", "/home/seanh/Music/GuitarPro")
+    profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream")
+
+    driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path=r'/usr/bin/geckodriver')
     driver.get(url)
     button = driver.find_element_by_class_name("_2fDTY")
     driver.execute_script("arguments[0].click();", button)
+    print("here")
     #driver.quit()
