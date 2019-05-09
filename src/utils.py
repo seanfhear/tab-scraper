@@ -6,6 +6,9 @@ from PyQt5 import QtGui
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
+from configparser import ConfigParser
+import os
+
 
 # TODO remove warning suppressions
 
@@ -18,6 +21,7 @@ def search_tabs(search_string, types):
     page = 1
     # get first page of results
     response = requests.get(SEARCH_URL.format(page, search_string))
+    # count is the number of results, used to know how many pages to search
     count = 0
     try:
         # isolate results from page using regex
@@ -27,15 +31,16 @@ def search_tabs(search_string, types):
     except AttributeError:
         results = ''
     response_data = json.loads(results)
-    ret = []
 
+    ret = []
     while count > 0:
         for item in response_data:
             try:
                 # Get every result that has a desired type
                 if item["type"] in types:
-                    ret.append((item["type"], item["artist_name"], item["song_name"], str(round(float(item["rating"]), 1)),
-                                str(item["votes"]), item["tab_url"], str(item["version"])))
+                    ret.append((item["type"], item["artist_name"], item["song_name"],
+                                str(round(float(item["rating"]), 1)), str(item["votes"]),
+                                item["tab_url"], str(item["version"])))
             except KeyError:
                 # key error on "official" tabs which have 'marketing_type' instead of 'type', not interested in these tabs
                 ''
@@ -57,20 +62,29 @@ def download_tab(url):
     print("downloading tab...")
 
 
-def download_file(url):
+def download_file(url, type, artist):
     print("downloading file...")
+    config = ConfigParser()
+    config.read('settings.cfg')
+    cfg = config['MAIN']
+
+    gecko_path = cfg['gecko_path']
+
+    destination_root = cfg['destination_root']
+    destination = destination_root + type + "/" + artist
+    os.makedirs(destination, exist_ok=True)
+
     options = Options()
     options.headless = True
 
     profile = FirefoxProfile()
     profile.set_preference("browser.download.folderList", 2)
     profile.set_preference("browser.download.manager.showWhenStarting", False)
-    profile.set_preference("browser.download.dir", "/home/seanh/Music/GuitarPro")
+    profile.set_preference("browser.download.dir", destination)
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream")
 
-    driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path=r'/usr/bin/geckodriver')
+    driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path=gecko_path)
     driver.get(url)
     button = driver.find_element_by_class_name("_2fDTY")
     driver.execute_script("arguments[0].click();", button)
-    print("here")
     #driver.quit()

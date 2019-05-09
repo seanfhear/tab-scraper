@@ -141,7 +141,7 @@ class MainWindow(object):
             is_file = True
 
         if is_file:
-            utils.download_file(url)
+            utils.download_file(url, row[0], row[1].replace("/", ""))
         else:
             utils.download_tab(url)
 
