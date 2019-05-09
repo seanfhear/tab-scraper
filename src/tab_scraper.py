@@ -1,5 +1,6 @@
 # noinspection PyUnresolvedReferences
 from PyQt5 import QtCore, QtGui, QtWidgets
+import threading
 import utils
 import sys
 
@@ -143,7 +144,7 @@ class MainWindow(object):
         if is_file:
             utils.download_file(url, row[0], row[1].replace("/", ""))
         else:
-            utils.download_tab(url)
+            utils.download_tab(url, row[0], row[1].replace("/", ""), row[2], row[6])
 
 
 if __name__ == "__main__":

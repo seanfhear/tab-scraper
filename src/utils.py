@@ -1,13 +1,12 @@
 import requests
 import re
 import json
-# noinspection PyUnresolvedReferences
-from PyQt5 import QtGui
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from configparser import ConfigParser
 import os
+from fpdf import FPDF
 
 
 # TODO remove warning suppressions
@@ -42,7 +41,7 @@ def search_tabs(search_string, types):
                                 str(round(float(item["rating"]), 1)), str(item["votes"]),
                                 item["tab_url"], str(item["version"])))
             except KeyError:
-                # key error on "official" tabs which have 'marketing_type' instead of 'type', not interested in these tabs
+                # key error on "official" tabs, not interested in these tabs
                 ''
             count -= 1
         if count > 0:
@@ -58,11 +57,32 @@ def search_tabs(search_string, types):
     return ret
 
 
-def download_tab(url):
+def download_tab(url, tab_type, artist, title, version):
     print("downloading tab...")
+    config = ConfigParser()
+    config.read('settings.cfg')
+    cfg = config['MAIN']
+
+    gecko_path = cfg['gecko_path']
+
+    # create destination directory if it doesn't exist
+    destination_root = cfg['destination_root']
+    destination = destination_root + tab_type + "/" + artist
+    os.makedirs(destination, exist_ok=True)
+
+    options = Options()
+    options.headless = True
+
+    driver = webdriver.Firefox(options=options, executable_path=gecko_path)
+    driver.get(url)
+    tab = driver.find_element_by_tag_name("pre")
+
+    filename = destination + "/" + title + " (Ver " + version + ")" + ".txt"
+    with open(filename, 'w+') as f:
+        f.write(tab.text)
 
 
-def download_file(url, type, artist):
+def download_file(url, tab_type, artist):
     print("downloading file...")
     config = ConfigParser()
     config.read('settings.cfg')
@@ -70,8 +90,9 @@ def download_file(url, type, artist):
 
     gecko_path = cfg['gecko_path']
 
+    # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']
-    destination = destination_root + type + "/" + artist
+    destination = destination_root + tab_type + "/" + artist
     os.makedirs(destination, exist_ok=True)
 
     options = Options()
@@ -87,4 +108,4 @@ def download_file(url, type, artist):
     driver.get(url)
     button = driver.find_element_by_class_name("_2fDTY")
     driver.execute_script("arguments[0].click();", button)
-    #driver.quit()
+    # driver.quit()
