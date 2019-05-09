@@ -3,7 +3,8 @@ import re
 import json
 # noinspection PyUnresolvedReferences
 from PyQt5 import QtGui
-from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
 
 # TODO remove warning suppressions
 
@@ -32,7 +33,7 @@ def search_tabs(search_string, types):
             try:
                 # Get every result that has a desired type
                 if item["type"] in types:
-                    ret.append((item["type"], item["artist_name"], item["song_name"], str(round(float(item["rating"]), 2)),
+                    ret.append((item["type"], item["artist_name"], item["song_name"], str(round(float(item["rating"]), 1)),
                                 str(item["votes"]), item["tab_url"], str(item["version"])))
             except KeyError:
                 # key error on "official" tabs which have 'marketing_type' instead of 'type', not interested in these tabs
@@ -57,8 +58,12 @@ def download_tab(url):
 
 def download_file(url):
     print("downloading file...")
-    response = requests.get(url)
-    soup = BeautifulSoup(response.content, "html.parser")
-    print(soup)
-    dl_form = soup.find('form')
-    print(dl_form)
+    print(url)
+    options = Options()
+    options.headless = False
+
+    driver = webdriver.Firefox(options=options, executable_path=r'/usr/bin/geckodriver')
+    driver.get(url)
+    button = driver.find_element_by_class_name("_2fDTY")
+    driver.execute_script("arguments[0].click();", button)
+    #driver.quit()
