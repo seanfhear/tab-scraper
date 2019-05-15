@@ -135,16 +135,17 @@ class MainWindow(object):
 
     def download_tab(self):
         print("downloading...")
-        row = self.results[self.tableWidget.currentRow()]
-        url = row[-2]
-        is_file = False
-        if row[0] == "Pro" or row[0] == "Power":
-            is_file = True
+        if len(self.results) > 0:
+            row = self.results[self.tableWidget.currentRow()]
+            url = row[-2]
+            is_file = False
+            if row[0] == "Pro" or row[0] == "Power":
+                is_file = True
 
-        if is_file:
-            utils.download_file(url, row[0], row[1].replace("/", ""))
-        else:
-            utils.download_tab(url, row[0], row[1].replace("/", ""), row[2], row[6])
+            if is_file:
+                utils.download_file(url, row[0], row[1].replace("/", ""))
+            else:
+                utils.download_tab(url, row[0], row[1].replace("/", ""), row[2], row[6])
 
 
 if __name__ == "__main__":

@@ -1,15 +1,15 @@
-import requests
+import os
 import re
 import json
+import requests
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
+from selenium.common.exceptions import NoSuchElementException
 from configparser import ConfigParser
-import os
-from fpdf import FPDF
 
 
-# TODO remove warning suppressions
+# TODO timeout download
 
 SEARCH_URL = "https://www.ultimate-guitar.com/search.php?page={}&search_type=title&value={}"
 RESULTS_PATTERN = "\"results\":(\[.*?\]),\"pagination\""
@@ -58,7 +58,6 @@ def search_tabs(search_string, types):
 
 
 def download_tab(url, tab_type, artist, title, version):
-    print("downloading tab...")
     config = ConfigParser()
     config.read('settings.cfg')
     cfg = config['MAIN']
@@ -75,15 +74,32 @@ def download_tab(url, tab_type, artist, title, version):
 
     driver = webdriver.Firefox(options=options, executable_path=gecko_path)
     driver.get(url)
-    tab = driver.find_element_by_tag_name("pre")
 
-    filename = destination + "/" + title + " (Ver " + version + ")" + ".txt"
-    with open(filename, 'w+') as f:
-        f.write(tab.text)
+    # clear the privacy policy message
+    try:
+        popup_btn = driver.find_element_by_xpath('//button[text()="Got it, thanks!"]')
+        popup_btn.click()
+    except NoSuchElementException:
+        pass
+
+    # clear the official tab ad
+    try:
+        popup_btn = driver.find_element_by_xpath('//div[contains(@class, "ai-ah")]//button')
+        popup_btn.click()
+    except NoSuchElementException:
+        pass
+
+    # hide the autoscroll tool
+#    autoscroller = driver.find_element_by_xpath('//article//section/div/button/span[text()="Autoscroll"]')
+    autoscroller = driver.find_element_by_xpath('//span[text()="Autoscroll"]/parent::button/parent::div/parent::section')
+    driver.execute_script("arguments[0].setAttribute('style', 'display: none')", autoscroller)
+
+    tab = driver.find_element_by_tag_name("pre")
+    filename = destination + "/" + title + " (Ver " + version + ")" + ".png"
+    tab.screenshot(filename)
 
 
 def download_file(url, tab_type, artist):
-    print("downloading file...")
     config = ConfigParser()
     config.read('settings.cfg')
     cfg = config['MAIN']
@@ -106,6 +122,7 @@ def download_file(url, tab_type, artist):
 
     driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path=gecko_path)
     driver.get(url)
-    button = driver.find_element_by_class_name("_2fDTY")
+    button = driver.find_element_by_xpath('//button/span[text()="DOWNLOAD Guitar Pro TAB" '
+                                          'or text()="DOWNLOAD Power TAB"]')
     driver.execute_script("arguments[0].click();", button)
     # driver.quit()
