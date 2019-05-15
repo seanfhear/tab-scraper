@@ -90,7 +90,6 @@ def download_tab(url, tab_type, artist, title, version):
         pass
 
     # hide the autoscroll tool
-#    autoscroller = driver.find_element_by_xpath('//article//section/div/button/span[text()="Autoscroll"]')
     autoscroller = driver.find_element_by_xpath('//span[text()="Autoscroll"]/parent::button/parent::div/parent::section')
     driver.execute_script("arguments[0].setAttribute('style', 'display: none')", autoscroller)
 
