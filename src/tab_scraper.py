@@ -1,7 +1,5 @@
-# noinspection PyUnresolvedReferences
 from PyQt5 import QtCore, QtGui, QtWidgets
-import threading
-import utils
+from src import utils
 import sys
 
 TOTAL_WIDTH = 1000
@@ -21,10 +19,7 @@ TYPES_DICT = {"Chords": "Chords",
               "Ukulele": "Ukulele Chords"}
 TABLE_COLUMNS = ["Type", "Artist", "Title", "Rating", "Votes"]
 
-# TODO remove warning suppressions
 
-
-# noinspection PyUnresolvedReferences
 class MainWindow(object):
     def setup_ui(self, search_window):
         self.results = []
