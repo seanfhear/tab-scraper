@@ -63,9 +63,9 @@ def download_tab(url, tab_type, artist, title, version):
         # If the application is run as a bundle, the pyInstaller bootloader
         # extends the sys module by a flag frozen=True and sets the app
         # path into variable _MEIPASS'.
-        application_path = sys.executable
+        application_path = os.path.dirname(sys.executable)
     else:
-        application_path = os.path.dirname(os.path.abspath(__file__))
+        application_path = os.path.dirname(os.path.abspath(os.path.splitext(__file__)[0]))
     settings_file = os.path.join(application_path, "settings.cfg")
 
     config = ConfigParser()
@@ -111,13 +111,11 @@ def download_tab(url, tab_type, artist, title, version):
 def download_file(url, tab_type, artist):
     if getattr(sys, 'frozen', False):
         # If the application is run as a bundle, the pyInstaller bootloader
-        # extends the sys module by a flag frozen=True and sets the app
-        # path into variable _MEIPASS'.
-        application_path = sys.executable
+        # extends the sys module by a flag frozen=True
+        application_path = os.path.dirname(sys.executable)
     else:
-        application_path = os.path.dirname(os.path.abspath(__file__))
+        application_path = os.path.dirname(os.path.abspath(os.path.splitext(__file__)[0]))
     settings_file = os.path.join(application_path, "settings.cfg")
-    print(settings_file)
     config = ConfigParser()
     config.read(settings_file)
     cfg = config['MAIN']
