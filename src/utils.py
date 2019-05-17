@@ -151,7 +151,7 @@ def download_file(url, tab_type, artist):
                                           'or text()="DOWNLOAD Power TAB"]')
     driver.execute_script("arguments[0].click();", button)
 
-    # kill firefox process after 30 seconds to give time for download
+    # kill firefox process after 10 seconds to give time for download
     # TODO kill process immediately after download completes
-    sleep(30)
+    sleep(10)
     driver.quit()
