@@ -16,7 +16,6 @@ All files are sorted into directories for quick and easy access.
 
 1. Python 3
 2. Firefox Web Browser
-3. [Geckodriver](https://github.com/mozilla/geckodriver/releases) for Firefox
 
 ### Running the Program
 
