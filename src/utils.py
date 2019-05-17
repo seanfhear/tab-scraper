@@ -3,14 +3,13 @@ import re
 import sys
 import json
 import requests
+from time import sleep
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.common.exceptions import NoSuchElementException
 from configparser import ConfigParser
 
-
-# TODO timeout download
 
 SEARCH_URL = "https://www.ultimate-guitar.com/search.php?page={}&search_type=title&value={}"
 RESULTS_PATTERN = "\"results\":(\[.*?\]),\"pagination\""
@@ -71,9 +70,10 @@ def download_tab(url, tab_type, artist, title, version):
     config.read(settings_file)
     cfg = config['MAIN']
 
-    # get path to gecko executable by joining the application path with 'geckodriver' and the file extension
-    # of the tab-scraper executable for linux + windows compatibility
-    gecko_path = (os.path.join(application_path, "geckodriver", ".exe" if os.path.splitext(__file__)[1] == ".exe" else "" ))[:-1]
+    # get path to gecko executable by joining the application path with 'geckodriver' and the .exe file extension
+    # if the executed tab_scraper is an exe
+    gecko_path = (os.path.join(application_path, "geckodriver",
+                               ".exe" if os.path.splitext(__file__)[1] == ".exe" else ""))[:-1]
 
     # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']
@@ -101,12 +101,17 @@ def download_tab(url, tab_type, artist, title, version):
         pass
 
     # hide the autoscroll tool
-    autoscroller = driver.find_element_by_xpath('//span[text()="Autoscroll"]/parent::button/parent::div/parent::section')
-    driver.execute_script("arguments[0].setAttribute('style', 'display: none')", autoscroller)
+    try:
+        autoscroll = driver.find_element_by_xpath('//span[text()="Autoscroll"]/parent::button/parent::div/parent::section')
+        driver.execute_script("arguments[0].setAttribute('style', 'display: none')", autoscroll)
+    except NoSuchElementException:
+        pass
 
     tab = driver.find_element_by_tag_name("pre")
-    filename = destination + "/" + title + " (Ver " + version + ")" + ".png"
+    filename = os.path.join(destination, (title + " (Ver " + version + ")" + ".png"))
     tab.screenshot(filename)
+
+    driver.quit()
 
 
 def download_file(url, tab_type, artist):
@@ -121,7 +126,10 @@ def download_file(url, tab_type, artist):
     config.read(settings_file)
     cfg = config['MAIN']
 
-    gecko_path = cfg['gecko_path']
+    # get path to gecko executable by joining the application path with 'geckodriver' and the .exe file extension
+    # if the executed tab_scraper is an exe
+    gecko_path = (os.path.join(application_path, "geckodriver",
+                               ".exe" if os.path.splitext(__file__)[1] == ".exe" else ""))[:-1]
 
     # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']
@@ -142,4 +150,8 @@ def download_file(url, tab_type, artist):
     button = driver.find_element_by_xpath('//button/span[text()="DOWNLOAD Guitar Pro TAB" '
                                           'or text()="DOWNLOAD Power TAB"]')
     driver.execute_script("arguments[0].click();", button)
-    # driver.quit()
+
+    # kill firefox process after 30 seconds to give time for download
+    # TODO kill process immediately after download completes
+    sleep(30)
+    driver.quit()
