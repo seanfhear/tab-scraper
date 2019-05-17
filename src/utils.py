@@ -61,8 +61,7 @@ def search_tabs(search_string, types):
 def download_tab(url, tab_type, artist, title, version):
     if getattr(sys, 'frozen', False):
         # If the application is run as a bundle, the pyInstaller bootloader
-        # extends the sys module by a flag frozen=True and sets the app
-        # path into variable _MEIPASS'.
+        # extends the sys module by a flag frozen=True
         application_path = os.path.dirname(sys.executable)
     else:
         application_path = os.path.dirname(os.path.abspath(os.path.splitext(__file__)[0]))
@@ -72,7 +71,9 @@ def download_tab(url, tab_type, artist, title, version):
     config.read(settings_file)
     cfg = config['MAIN']
 
-    gecko_path = cfg['gecko_path']
+    # get path to gecko executable by joining the application path with 'geckodriver' and the file extension
+    # of the tab-scraper executable for linux + windows compatibility
+    gecko_path = (os.path.join(application_path, "geckodriver", ".exe" if os.path.splitext(__file__)[1] == ".exe" else "" ))[:-1]
 
     # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']

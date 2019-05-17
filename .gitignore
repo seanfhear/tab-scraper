@@ -3,3 +3,8 @@
 venv/
 *.json
 *.log
+dist/
+src/geckodriver
+src/ui.py
+*.spec
+build/
