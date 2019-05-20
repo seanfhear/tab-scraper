@@ -14,8 +14,7 @@ All files are sorted into directories for quick and easy access.
 
 ### Prerequisites
 
-1. Python 3
-2. Firefox Web Browser
+1. Firefox Web Browser
 
 ### Running the Program
 
@@ -47,3 +46,5 @@ All files are sorted into directories for quick and easy access.
 - Set download root through interface instead of manually in the settings.cfg
 - Drive/Dropbox integration
 - Bare bones PyQT to reduce binary size
+- Chrome support
+- Remove terminal window from executables
