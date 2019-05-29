@@ -136,6 +136,9 @@ def download_file(url, tab_type, artist):
     destination = os.path.join(destination_root, tab_type, artist)
     os.makedirs(destination, exist_ok=True)
 
+    # count how many files are in the destination already
+    nFiles = len(os.listdir(destination))
+
     options = Options()
     options.headless = True
 
@@ -152,6 +155,11 @@ def download_file(url, tab_type, artist):
     driver.execute_script("arguments[0].click();", button)
 
     # kill firefox process after 10 seconds to give time for download
-    # TODO kill process immediately after download completes
-    sleep(10)
+    downloading = True
+    timeout = 15
+    while downloading and timeout > 0:
+        sleep(0.5)
+        if len(os.listdir(destination)) > nFiles:
+            downloading = False
+        timeout -= 0.5
     driver.quit()

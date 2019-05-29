@@ -129,7 +129,6 @@ class MainWindow(object):
                 self.tableWidget.setItem(i, j, item)
 
     def download_tab(self):
-        print("downloading...")
         if len(self.results) > 0:
             row = self.results[self.tableWidget.currentRow()]
             url = row[-2]
