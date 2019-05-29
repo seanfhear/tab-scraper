@@ -47,4 +47,3 @@ All files are sorted into directories for quick and easy access.
 - Drive/Dropbox integration
 - Bare bones PyQT to reduce binary size
 - Chrome support
-- Remove terminal window from executables
