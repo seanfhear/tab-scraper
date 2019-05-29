@@ -14,6 +14,7 @@ from configparser import ConfigParser
 SEARCH_URL = "https://www.ultimate-guitar.com/search.php?page={}&search_type=title&value={}"
 RESULTS_PATTERN = "\"results\":(\[.*?\]),\"pagination\""
 RESULTS_COUNT_PATTERN = "\"tabs\",\"results_count\":([0-9]+?),\"results\""
+DOWNLOAD_TIMEOUT = 15
 
 
 def search_tabs(search_string, types):
@@ -154,9 +155,9 @@ def download_file(url, tab_type, artist):
                                           'or text()="DOWNLOAD Power TAB"]')
     driver.execute_script("arguments[0].click();", button)
 
-    # kill firefox process after 10 seconds to give time for download
+    # kill firefox process after download completes or a timeout is reached
     downloading = True
-    timeout = 15
+    timeout = DOWNLOAD_TIMEOUT
     while downloading and timeout > 0:
         sleep(0.5)
         if len(os.listdir(destination)) > nFiles:
