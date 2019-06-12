@@ -27,6 +27,7 @@ TABLE_COLUMNS = ["Type", "Artist", "Title", "Rating", "Votes"]
 
 class MainWindow(object):
     def setup_ui(self, search_window):
+        self.status = ''
         self.results = []
         font = QtGui.QFont()
         font.setPointSize(12)
@@ -50,7 +51,7 @@ class MainWindow(object):
             self.check_boxes[i] = QtWidgets.QCheckBox(self.central_widget)
             self.check_boxes[i].setGeometry(QtCore.QRect(OFFSET,
                                                          ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
-                                                                  (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * i),
+                                                          (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * i),
                                                          SEARCH_ELEMENT_WIDTH,
                                                          CHECK_BOX_HEIGHT))
             self.check_boxes[i].setObjectName(name.format("checkBox"))
@@ -59,8 +60,8 @@ class MainWindow(object):
         self.search_button = QtWidgets.QPushButton(self.central_widget)
         self.search_button.setGeometry(QtCore.QRect(OFFSET,
                                                     ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
-                                                             (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
-                                                             len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET),
+                                                     (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                     len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET),
                                                     BUTTON_WIDTH,
                                                     BUTTON_HEIGHT))
         self.search_button.setObjectName("searchButton")
@@ -71,9 +72,9 @@ class MainWindow(object):
         self.download_button = QtWidgets.QPushButton(self.central_widget)
         self.download_button.setGeometry(QtCore.QRect(OFFSET,
                                                       ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
-                                                               (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
-                                                               len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
-                                                               (OFFSET + BUTTON_HEIGHT)),
+                                                       (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                       len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
+                                                       (OFFSET + BUTTON_HEIGHT)),
                                                       BUTTON_WIDTH - DIRECTORY_BUTTON_WIDTH,
                                                       BUTTON_HEIGHT))
         self.download_button.setObjectName("downloadButton")
@@ -84,15 +85,28 @@ class MainWindow(object):
         self.set_directory_button = QtWidgets.QPushButton(self.central_widget)
         self.set_directory_button.setGeometry(QtCore.QRect(OFFSET + (BUTTON_WIDTH - DIRECTORY_BUTTON_WIDTH),
                                                            ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
-                                                                    (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
-                                                                    len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
-                                                                    (OFFSET + BUTTON_HEIGHT)),
+                                                            (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                            len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
+                                                            (OFFSET + BUTTON_HEIGHT)),
                                                            DIRECTORY_BUTTON_WIDTH,
                                                            BUTTON_HEIGHT))
         self.set_directory_button.setObjectName("downloadButton")
         self.set_directory_button.setText("...")
         self.set_directory_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.set_directory_button.clicked.connect(self.set_download_location)
+
+        self.status_message = QtWidgets.QLabel(self.central_widget)
+        self.status_message.setGeometry(QtCore.QRect(OFFSET,
+                                                     ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+                                                      (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                      len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
+                                                      (OFFSET + BUTTON_HEIGHT) * 2),
+                                                     BUTTON_WIDTH,
+                                                     BUTTON_HEIGHT))
+        status_font = QtGui.QFont()
+        status_font.setPointSize(10)
+        self.status_message.setFont(status_font)
+        self.status_message.setText(self.status)
 
 
         self.search_input = QtWidgets.QLineEdit(self.central_widget)
@@ -154,6 +168,8 @@ class MainWindow(object):
                 self.tableWidget.setItem(i, j, item)
 
     def download_tab(self):
+        self.status_message.setText('Downloading...')
+        self.status_message.repaint()
         if len(self.results) > 0:
             row = self.results[self.tableWidget.currentRow()]
             url = row[-2]
@@ -165,6 +181,8 @@ class MainWindow(object):
                 utils.download_file(url, row[0], row[1].replace("/", ""))
             else:
                 utils.download_tab(url, row[0], row[1].replace("/", ""), row[2], row[6])
+        self.status_message.setText('Download finished')
+        #self.central_widget.update()
 
     def set_download_location(self):
         dialog = QtWidgets.QFileDialog()

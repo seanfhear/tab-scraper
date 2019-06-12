@@ -12,3 +12,4 @@ build/
 *.sh
 src/settings.cfg
 tab_scraper/
+release_notes.txt
