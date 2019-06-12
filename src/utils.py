@@ -78,7 +78,7 @@ def download_tab(url, tab_type, artist, title, version):
 
     # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']
-    destination = destination_root + tab_type + "/" + artist
+    destination = os.path.join(destination_root, tab_type, artist)
     os.makedirs(destination, exist_ok=True)
 
     options = Options()

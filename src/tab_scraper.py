@@ -1,13 +1,18 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from src import utils
 import sys
+import os
+from configparser import ConfigParser
 
+VERSION = 'v.0.1.2'
 TOTAL_WIDTH = 1000
 SEARCH_WIDTH = 200
 SEARCH_ELEMENT_WIDTH = 150
 TEXT_BOX_HEIGHT = 30
 CHECK_BOX_HEIGHT = 20
 BUTTON_HEIGHT = 30
+BUTTON_WIDTH = 150
+DIRECTORY_BUTTON_WIDTH = 30
 OFFSET = 25
 CHECK_BOX_OFFSET = 15
 CHECK_BOX_NAMES = ["{}Chords", "{}Tab", "{}GuitarPro", "{}PowerTab", "{}Bass", "{}Ukulele"]
@@ -31,7 +36,7 @@ class MainWindow(object):
                          (OFFSET * 2 + BUTTON_HEIGHT)) * 2
 
         search_window.setObjectName("SearchWindow")
-        search_window.setWindowTitle("Tab Search")
+        search_window.setWindowTitle("Tab Scraper " + VERSION)
         search_window.setMinimumSize(QtCore.QSize(TOTAL_WIDTH, window_height))
         search_window.setMaximumSize(QtCore.QSize(TOTAL_WIDTH, window_height))
         search_window.setFont(font)
@@ -43,32 +48,52 @@ class MainWindow(object):
         self.check_boxes = [" "] * len(CHECK_BOX_NAMES)
         for i, name in enumerate(CHECK_BOX_NAMES):
             self.check_boxes[i] = QtWidgets.QCheckBox(self.central_widget)
-            self.check_boxes[i].setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+            self.check_boxes[i].setGeometry(QtCore.QRect(OFFSET,
+                                                         ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
                                                                   (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) * i),
-                                                         SEARCH_ELEMENT_WIDTH, CHECK_BOX_HEIGHT))
+                                                         SEARCH_ELEMENT_WIDTH,
+                                                         CHECK_BOX_HEIGHT))
             self.check_boxes[i].setObjectName(name.format("checkBox"))
             self.check_boxes[i].setText(name.format(""))
 
         self.search_button = QtWidgets.QPushButton(self.central_widget)
-        self.search_button.setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+        self.search_button.setGeometry(QtCore.QRect(OFFSET,
+                                                    ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
                                                              (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
                                                              len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET),
-                                                    SEARCH_ELEMENT_WIDTH, BUTTON_HEIGHT))
+                                                    BUTTON_WIDTH,
+                                                    BUTTON_HEIGHT))
         self.search_button.setObjectName("searchButton")
         self.search_button.setText("Search")
         self.search_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.search_button.clicked.connect(self.search_tabs)
 
         self.download_button = QtWidgets.QPushButton(self.central_widget)
-        self.download_button.setGeometry(QtCore.QRect(OFFSET, ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+        self.download_button.setGeometry(QtCore.QRect(OFFSET,
+                                                      ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
                                                                (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
                                                                len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
                                                                (OFFSET + BUTTON_HEIGHT)),
-                                                      SEARCH_ELEMENT_WIDTH, BUTTON_HEIGHT))
+                                                      BUTTON_WIDTH - DIRECTORY_BUTTON_WIDTH,
+                                                      BUTTON_HEIGHT))
         self.download_button.setObjectName("downloadButton")
         self.download_button.setText("Download")
         self.download_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
         self.download_button.clicked.connect(self.download_tab)
+
+        self.set_directory_button = QtWidgets.QPushButton(self.central_widget)
+        self.set_directory_button.setGeometry(QtCore.QRect(OFFSET + (BUTTON_WIDTH - DIRECTORY_BUTTON_WIDTH),
+                                                           ((OFFSET * 2 + TEXT_BOX_HEIGHT) +
+                                                                    (CHECK_BOX_HEIGHT + CHECK_BOX_OFFSET) *
+                                                                    len(CHECK_BOX_NAMES) - CHECK_BOX_OFFSET + OFFSET +
+                                                                    (OFFSET + BUTTON_HEIGHT)),
+                                                           DIRECTORY_BUTTON_WIDTH,
+                                                           BUTTON_HEIGHT))
+        self.set_directory_button.setObjectName("downloadButton")
+        self.set_directory_button.setText("...")
+        self.set_directory_button.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.set_directory_button.clicked.connect(self.set_download_location)
+
 
         self.search_input = QtWidgets.QLineEdit(self.central_widget)
         self.search_input.setGeometry(QtCore.QRect(OFFSET, OFFSET, SEARCH_ELEMENT_WIDTH, TEXT_BOX_HEIGHT))
@@ -140,6 +165,27 @@ class MainWindow(object):
                 utils.download_file(url, row[0], row[1].replace("/", ""))
             else:
                 utils.download_tab(url, row[0], row[1].replace("/", ""), row[2], row[6])
+
+    def set_download_location(self):
+        dialog = QtWidgets.QFileDialog()
+        folder_path = dialog.getExistingDirectory(None, "Select Folder")
+
+        if getattr(sys, 'frozen', False):
+            # If the application is run as a bundle, the pyInstaller bootloader
+            # extends the sys module by a flag frozen=True
+            application_path = os.path.dirname(sys.executable)
+        else:
+            application_path = os.path.dirname(os.path.abspath(os.path.splitext(__file__)[0]))
+        settings_file = os.path.join(application_path, "settings.cfg")
+
+        config = ConfigParser()
+        config.read(settings_file)
+
+        config.set('MAIN', 'destination_root', folder_path)
+        with open(settings_file, 'w+') as f:
+            config.write(f)
+
+
 
 
 if __name__ == "__main__":

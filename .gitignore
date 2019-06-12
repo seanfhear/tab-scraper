@@ -8,3 +8,7 @@ src/geckodriver
 src/ui.py
 *.spec
 build/
+*.zip
+*.sh
+src/settings.cfg
+tab_scraper/
