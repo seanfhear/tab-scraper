@@ -43,7 +43,7 @@ All files are sorted into directories for quick and easy access.
 ### To Do
 
 - Download messages on interface (in progress, complete)
-- Set download root through interface instead of manually in the settings.cfg
 - Drive/Dropbox integration
 - Bare bones PyQT to reduce binary size
 - Chrome support
+- Option to transpose chords
