@@ -39,11 +39,3 @@ All files are sorted into directories for quick and easy access.
 - [Selenium](https://selenium-python.readthedocs.io/)
 
 - [Geckodriver](https://github.com/mozilla/geckodriver/releases)
-
-### To Do
-
-- Download messages on interface (in progress, complete)
-- Drive/Dropbox integration
-- Bare bones PyQT to reduce binary size
-- Chrome support
-- Option to transpose chords
