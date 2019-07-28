@@ -1,6 +1,6 @@
 .idea/
 *.pyc
-venv/
+vvenv/
 *.json
 *.log
 dist/
@@ -10,6 +10,8 @@ src/ui.py
 build/
 *.zip
 *.sh
+*.bat
+*.exe
 src/settings.cfg
 tab_scraper/
 release_notes.txt
