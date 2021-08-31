@@ -12,15 +12,17 @@ from configparser import ConfigParser
 
 
 SEARCH_URL = "https://www.ultimate-guitar.com/search.php?search_type=title&value={}"
-RESULTS_PATTERN = "\"results\":(\[.*?\]),\"pagination\""
-RESULTS_COUNT_PATTERN = "\"tabs\",\"results_count\":([0-9]+?),\"results\""
+RESULTS_PATTERN = "\&quot\;results\&quot\;:(\[.*?\]),\&quot\;pagination\&quot\;"
+#RESULTS_PATTERN = "\"results\":(\[.*?\]),\"pagination\""
+RESULTS_COUNT_PATTERN = "\&quot\;tabs\&quot\;,\&quot\;results_count\&quot\;:([0-9]+?),\&quot\;results\&quot\;"
+#RESULTS_COUNT_PATTERN = "\"tabs\",\"results_count\":([0-9]+?),\"results\""
 DOWNLOAD_TIMEOUT = 15
 
 
 def search_tabs(search_string, types):
     page = 1
     # get first page of results
-    response = requests.get(SEARCH_URL.format(page, search_string))
+    response = requests.get(SEARCH_URL.format(search_string))
     # count is the number of results, used to know how many pages to search
     count = 0
     try:
@@ -28,6 +30,8 @@ def search_tabs(search_string, types):
         response_body = response.content.decode()
         results = re.search(RESULTS_PATTERN, response_body).group(1)
         count = int(re.search(RESULTS_COUNT_PATTERN, response_body).group(1))
+        results = re.sub(r'&quot;', '"', results)
+        results = json.loads(results)
     except AttributeError:
         results = ''
     response_data = json.loads(results)

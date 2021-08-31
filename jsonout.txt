@@ -1,0 +1,134 @@
+[
+  {
+    "artist_name": "TesseracT",
+    "artist_url": "/artist/tesseract_29262",
+    "song_name": "Juno",
+    "marketing_type": "official",
+    "tab_url": "https://www.ultimate-guitar.com/pro/?utm_source=UltimateGuitar&amp;utm_medium=Search&amp;utm_campaign=UG+Search&amp;utm_content=Official+Version&amp;artist=TesseracT&amp;song=juno&amp;tab_id=2433301",
+    "device": null,
+    "app_link": "//www.ultimate-guitar.com/send?ug_from=yozio_splash&amp;url=https://play.google.com/store/apps/details?id=com.ultimateguitar.tabs&amp;ug_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0&amp;referrer=utm_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0",
+    "highlight": {
+      "song_name": [
+        [
+          0,
+          4
+        ]
+      ],
+      "artist_name": [
+        [
+          0,
+          9
+        ]
+      ]
+    }
+  },
+  {
+    "artist_name": "TesseracT",
+    "artist_url": "/artist/tesseract_29262",
+    "song_name": "Juno",
+    "marketing_type": "TabPro",
+    "rating": 4.8404,
+    "votes": 7,
+    "tab_url": "https://www.ultimate-guitar.com/pro/?utm_source=UltimateGuitar&amp;utm_medium=Search&amp;utm_campaign=UG+Search&amp;artist=TesseracT&amp;song=juno&amp;tab_id=2425607",
+    "device": null,
+    "app_link": "//www.ultimate-guitar.com/send?ug_from=yozio_splash&amp;url=https://play.google.com/store/apps/details?id=com.ultimateguitar.tabs&amp;ug_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0&amp;referrer=utm_campaign=UG_TPAndroid_SearchTpLink_SearchPage_mobile0",
+    "highlight": {
+      "song_name": [
+        [
+          0,
+          4
+        ]
+      ],
+      "artist_name": [
+        [
+          0,
+          9
+        ]
+      ]
+    }
+  },
+  {
+    "id": 2390557,
+    "song_id": 2743409,
+    "song_name": "Juno",
+    "artist_id": 29262,
+    "artist_name": "TesseracT",
+    "type": "Pro",
+    "part": "",
+    "version": 1,
+    "votes": 10,
+    "rating": 4.80031,
+    "date": "1527099921",
+    "status": "approved",
+    "preset_id": 28177,
+    "tab_access_type": "public",
+    "tp_version": 1,
+    "tonality_name": "Fm",
+    "version_description": "Whole song transcription, all instruments, ambient guitar and lyrics included. Multiple notation/time signature interpretations for similar parts as it's quite ambiguous. The Tab Pro conversion by UG has a few weird things going on, and the lyrics don't align like in the original file, so keep that in mind.",
+    "verified": 0,
+    "recording": {
+      "is_acoustic": 0,
+      "tonality_name": "",
+      "performance": null,
+      "recording_artists": []
+    },
+    "artist_url": "https://www.ultimate-guitar.com/artist/tesseract_29262",
+    "tab_url": "https://tabs.ultimate-guitar.com/tab/tesseract/juno-guitar-pro-2390557"
+  },
+  {
+    "id": 2395961,
+    "song_id": 2743409,
+    "song_name": "Juno",
+    "artist_id": 29262,
+    "artist_name": "TesseracT",
+    "type": "Pro",
+    "part": "",
+    "version": 2,
+    "votes": 0,
+    "rating": 0,
+    "date": "1528113155",
+    "status": "approved",
+    "preset_id": 28177,
+    "tab_access_type": "public",
+    "tp_version": 2,
+    "tonality_name": "",
+    "version_description": "",
+    "verified": 0,
+    "recording": {
+      "is_acoustic": 0,
+      "tonality_name": "",
+      "performance": null,
+      "recording_artists": []
+    },
+    "artist_url": "https://www.ultimate-guitar.com/artist/tesseract_29262",
+    "tab_url": "https://tabs.ultimate-guitar.com/tab/tesseract/juno-guitar-pro-2395961"
+  },
+  {
+    "id": 2425607,
+    "song_id": 2743409,
+    "song_name": "Juno",
+    "artist_id": 29262,
+    "artist_name": "TesseracT",
+    "type": "Pro",
+    "part": "",
+    "version": 3,
+    "votes": 7,
+    "rating": 4.8404,
+    "date": "1531581826",
+    "status": "approved",
+    "preset_id": 28177,
+    "tab_access_type": "public",
+    "tp_version": 3,
+    "tonality_name": "F",
+    "version_description": "I saw TesseracT in Paris to be sure of finger placement.",
+    "verified": 0,
+    "recording": {
+      "is_acoustic": 0,
+      "tonality_name": "",
+      "performance": null,
+      "recording_artists": []
+    },
+    "artist_url": "https://www.ultimate-guitar.com/artist/tesseract_29262",
+    "tab_url": "https://tabs.ultimate-guitar.com/tab/tesseract/juno-guitar-pro-2425607"
+  }
+]
