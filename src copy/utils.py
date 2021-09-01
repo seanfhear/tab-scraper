@@ -135,8 +135,11 @@ def download_file(url, tab_type, artist):
 
     # get path to gecko executable by joining the application path with 'geckodriver' and the .exe file extension
     # if the executed tab_scraper is an exe
-    gecko_path = (os.path.join(application_path, "geckodriver",
-                               ".exe" if os.path.splitext(__file__)[1] == ".exe" else ""))[:-1]
+    currentdir = os.path.dirname(os.path.realpath(__file__))
+    parentdir = os.path.dirname(currentdir)
+    sys.path.append(parentdir)
+    #gecko_path = (os.path.join(application_path, "geckodriver", ".exe" if os.path.splitext(__file__)[1] == ".exe" else ""))[:-1]
+    gecko_path = currentdir
 
     # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']
