@@ -31,7 +31,6 @@ def search_tabs(search_string, types):
         results = re.search(RESULTS_PATTERN, response_body).group(1)
         count = int(re.search(RESULTS_COUNT_PATTERN, response_body).group(1))
         results = re.sub(r'&quot;', '"', results)
-        results = json.loads(results)
     except AttributeError:
         results = ''
     response_data = json.loads(results)
@@ -77,8 +76,11 @@ def download_tab(url, tab_type, artist, title, version):
 
     # get path to gecko executable by joining the application path with 'geckodriver' and the .exe file extension
     # if the executed tab_scraper is an exe
-    gecko_path = (os.path.join(application_path, "geckodriver",
-                               ".exe" if os.path.splitext(__file__)[1] == ".exe" else ""))[:-1]
+    currentdir = os.path.dirname(os.path.realpath(__file__))
+    parentdir = os.path.dirname(currentdir)
+    sys.path.append(parentdir)
+    gecko_path = (os.path.join(currentdir, "geckodriver", ".exe" if os.path.splitext(__file__)[1] == ".exe" else ""))[:-1]
+    gecko_path = currentdir
 
     # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']
