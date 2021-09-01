@@ -79,7 +79,7 @@ def download_tab(url, tab_type, artist, title, version):
     currentdir = os.path.dirname(os.path.realpath(__file__))
     parentdir = os.path.dirname(currentdir)
     sys.path.append(parentdir)
-    gecko_path = (os.path.join(currentdir, "geckodriver", ".exe" if os.path.splitext(__file__)[1] == ".exe" else ""))[:-1]
+    #gecko_path = (os.path.join(currentdir, "geckodriver", ".exe" if os.path.splitext(__file__)[1] == ".bat" else ""))[:-1]
     gecko_path = currentdir
 
     # create destination directory if it doesn't exist

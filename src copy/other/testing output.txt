@@ -1,0 +1,16 @@
+PS C:\Users\Workstation2\Desktop\vsc\dict\tab-scraper> python
+Python 3.9.5 (tags/v3.9.5:0a7dcbd, May  3 2021, 17:27:52) [MSC v.1928 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+import requests as rq, json, re
+SEARCH_URL = "https://www.ultimate-guitar.com/search.php?search_type=title&value={}"
+RESULTS_PATTERN = "\&quot\;results\&quot\;:(\[.*?\]),\&quot\;pagination\&quot\;"
+RESULTS_COUNT_PATTERN = "\&quot\;tabs\&quot\;,\&quot\;results_count\&quot\;:([0-9]+?),\&quot\;results\&quot\;"
+DOWNLOAD_TIMEOUT = 15
+search_string = 'tesseract juno'
+response = rq.get(SEARCH_URL.format(search_string))
+response_body = response.content.decode()
+results = re.search(RESULTS_PATTERN, response_body).group(1)
+count = int(re.search(RESULTS_COUNT_PATTERN, response_body).group(1))
+results = re.sub(r'&quot;', '"', results)
+results = json.loads(results)
+with open('jsonout.txt','w') as jhand: json.dump(results, jhand, indent=2)
