@@ -3,6 +3,7 @@ import re
 import sys
 import json
 import requests
+from platform import system as opersyst
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -50,11 +51,12 @@ def search_tabs(search_string, types):
             count -= 1
         if count > 0:
             page += 1
-            response = requests.get(SEARCH_URL.format(page, search_string))
+            response = requests.get(SEARCH_URL.format(search_string))
             try:
                 # isolate results from page using regex
                 response_body = response.content.decode()
                 results = re.search(RESULTS_PATTERN, response_body).group(1)
+                results = re.sub(r'&quot;', '"', results)
             except AttributeError:
                 results = ''
             response_data = json.loads(results)
@@ -89,8 +91,11 @@ def download_tab(url, tab_type, artist, title, version):
 
     options = Options()
     options.headless = True
-
-    driver = webdriver.Firefox(options=options, executable_path=gecko_path)
+    if opersyst == 'Windows':
+        execpath = f'{currentdir}/geckodriver.exe'
+    else:
+        execpath = f'{currentdir}/geckodriver'
+    driver = webdriver.Firefox(options=options, executable_path=execpath)
     driver.get(url)
 
     # clear the privacy policy message
