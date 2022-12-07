@@ -82,7 +82,7 @@ def download_tab(url, tab_type, artist, title, version):
     parentdir = os.path.dirname(currentdir)
     sys.path.append(parentdir)
     #gecko_path = (os.path.join(currentdir, "geckodriver", ".exe" if os.path.splitext(__file__)[1] == ".bat" else ""))[:-1]
-    gecko_path = currentdir
+    gecko_path = os.path.join(currentdir,'geckodriver.exe')
 
     # create destination directory if it doesn't exist
     destination_root = cfg['destination_root']
@@ -163,7 +163,11 @@ def download_file(url, tab_type, artist):
     profile.set_preference("browser.download.dir", destination)
     profile.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/octet-stream")
 
-    driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path=gecko_path)
+    if opersyst == 'Windows':
+        execpath = f'{currentdir}/geckodriver.exe'
+    else:
+        execpath = f'{currentdir}/geckodriver'
+    driver = webdriver.Firefox(options=options, firefox_profile=profile, executable_path=execpath)
     driver.get(url)
     button = driver.find_element_by_xpath('//button/span[text()="DOWNLOAD Guitar Pro TAB" '
                                           'or text()="DOWNLOAD Power TAB"]')
