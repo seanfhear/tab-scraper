@@ -1,5 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-from src import utils
+import utils
 import sys
 import os
 from configparser import ConfigParser

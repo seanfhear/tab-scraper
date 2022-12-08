@@ -15,3 +15,5 @@ build/
 src/settings.cfg
 tab_scraper/
 release_notes.txt
+src copy/utils.py
+.DS_Store
