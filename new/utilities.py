@@ -76,6 +76,6 @@ def retrieve(url):
     data = driver.page_source
     # turn it into a soup object and return it
     soup = bs(data, features="html.parser")
+    driver.close()
     return soup
 
-driver.close()
