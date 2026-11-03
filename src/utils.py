@@ -20,7 +20,7 @@ DOWNLOAD_TIMEOUT = 15
 def search_tabs(search_string, types):
     page = 1
     # get first page of results
-    response = requests.get(SEARCH_URL.format(page, search_string))
+    response = requests.get(SEARCH_URL.format(page, search_string), timeout=30)
     # count is the number of results, used to know how many pages to search
     count = 0
     try:
